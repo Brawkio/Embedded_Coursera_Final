@@ -12,11 +12,18 @@
 #***************************Sources files*************************************
 # Source files in case of selecting HOST
 SOURCES = main.c \
-	memory.c 
+	memory.c \
+	stats.c \
+	course1.c \
+	data.c
+
 
 # Source files in case of selecting the MSP432
-SOURCES_MSP432 = main.c \
+SOURCES_MSP432 = #main.c \
 	memory.c \
+	stats.c \
+	course1.c \
+	data.c \
 	startup_msp432p401r_gcc.c \
 	system_msp432p401r.c \
 	interrupts_msp432p401r_gcc.c

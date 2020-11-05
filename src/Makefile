@@ -8,7 +8,7 @@
 # This makefile is for intended to be used as a Native and CrossCompiler Builder for HOST and the MSP432 platform.
 # 
 #
-# Use: make [TARGET] [PLATFORM-OVERRIDES]
+# Use: make [TARGET] [PLATFORM-OVERRIDES] [COURSE]
 #
 # Build Targets:
 # <FILE.i>    - Builds <FILE.i> preprocessed output of all c-program implementation files.
@@ -16,7 +16,7 @@
 # (c1m2_assembly),also throwing an assembly report using the objdump utility.
 # <FILE.o>    - Builds <FILE.o> object file for all c-source files (but do not link).
 # compile-all - Compile all object files, but DO NOT link.
-# build       - Compile all object files and link into a final executable (c1m2.out), also creating a report of the size of 
+# build       - Compile all object files and link into a final executable (final.out), also creating a report of the size of 
 # the program using the size utility.
 # clean       - Removes all compiled objects, preprocessed outputs, assembly outputs, executable files and build output files.
 #    
@@ -31,15 +31,18 @@ LINKER_FILE = msp432p401r.lds
 CPU = cortex-m4
 ARCH = armv7e-m
 SPECS = nosys.specs
-TARGET = c1m2
-TARGET_ASSEMBLY = c1m2_assembly#this target is created with the solely purpose of avoiding the override in the recipe between the
+TARGET = final
+TARGET_ASSEMBLY = final_assembly#this target is created with the solely purpose of avoiding the override in the recipe between the
 #targets build and %.asm:%.c thus allowing to generate two different targets with the same recipe.
 
 # Platform Overrides
 	
 ifeq ($(PLATFORM),HOST)#if HOST is selected
 	CC = gcc #Compiler is gcc (native)
-	CFLAGS = -DHOST  # C Programming Flags Defines macro
+	CFLAGS = -DHOST -DCOURSE1 -DVERBOSE# C Programming Flags -D Defines macro. It allows the program to select what libraries
+	# to include using a compile time switch defined in platform.h. If -DHOST is put in the commands/recipe, stdio.h is
+	# included. If -DMSP432 is put, msp432p401r.h is included. If another macro -DSOMETHINGELSE is put, the program will throw
+	# an error and a message.
 	LD = ld #linker to be used
 	OBJECTS = $(SOURCES:.c=.o)#OBJECTS is a vector which contains all the .o generated files from the source files
 	DEPENDENCIES = $(SOURCES:.c=.d)#DEPENDENCIES is a vector which contains all the .d generated files from the source files
@@ -52,7 +55,7 @@ ifeq ($(PLATFORM),HOST)#if HOST is selected
 	SZ = size#Utility for throwing the data size from the output file
 else
 	CC = arm-none-eabi-gcc
-	CFLAGS = -DMSP432 -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS) 
+	CFLAGS = -DMSP432 -DCOURSE1 -DVERBOSE -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS) 
 	LD = arm-none-eabi-ld
 	OBJECTS = $(SOURCES_MSP432:.c=.o)
 	DEPENDENCIES = $(SOURCES_MSP432:.c=.d)
@@ -100,8 +103,8 @@ $%.o: %.c
 # https://stackoverflow.com/questions/97338/gcc-dependency-generation-for-a-different-output-directory
 
 # Compilation of all source files without linking them
-.PHONY: compile_all
-compile_all: $(TARGET)	
+.PHONY: compile-all
+compile-all: $(TARGET)	
 $(TARGET): $(OBJECTS)
 	$(CC) -MMD -c $< $(OBJECTS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
@@ -117,4 +120,4 @@ $(TARGET).out: $(OBJECTS)
 # Cleans all generated files from the build
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS) $(TARGET).out $(TARGET).map $(TARGET_ASSEMBLY).out $(TARGET_ASSEMBLY).map $(DEPENDENCIES) $(ASSEMBLY) $(PREPROCESSOR)
+	rm -f $(OBJECTS) $(TARGET).out $(TARGET).map $(TARGET_ASSEMBLY).out $(TARGET_ASSEMBLY).map *.d *.o $(ASSEMBLY) $(PREPROCESSOR) 

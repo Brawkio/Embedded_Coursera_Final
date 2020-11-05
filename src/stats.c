@@ -20,74 +20,39 @@
  * @date <06/10/2020> (dd/mm/yyyy)
  *
  */
-
-
-#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "platform.h"
 #include "stats.h"
 
 /* Size of the Data Set */
 #define SIZE (40)
 
-void main() 
-{
-
-  unsigned char test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
-                              114, 88,   45,  76, 123,  87,  25,  23,
-                              200, 122, 150, 90,   92,  87, 177, 244,
-                              201,   6,  12,  60,   8,   2,   5,  67,
-                                7,  87, 250, 230,  99,   3, 100,  90};
-	     
-unsigned char *eq;
-eq=&test[0];
-print_statistics(eq,SIZE);
-}
- 
-
-
-
   /* Statistics and Printing Functions Go Here */
 void print_statistics(unsigned char *array, unsigned int n_elements)
 {
-printf("\n\t|The array of %d elements is:|\n",n_elements);
+PRINTF("\n\t|The array of %d elements is:|\n",n_elements);
 print_array(array,n_elements);
 array=sort_array(array, n_elements);
-printf("\n|The previous array of %d elements sorted from maximum to minimum value is:|\n",n_elements);
+PRINTF("\n|The previous array of %d elements sorted from maximum to minimum value is:|\n",n_elements);
 print_array(array,n_elements);
-printf("\nThe median (rounded down to the nearest integer) is: %d\n",find_median(array,n_elements));
-printf("\nThe mean (rounded down to the nearest integer) is: %d\n",find_mean(array,n_elements));
-printf("\nThe maximum value from the data is: %d\n",find_maximum(array,n_elements));
-printf("\nThe minimum value from the data is: %d\n",find_minimum(array,n_elements));
+PRINTF("\nThe median (rounded down to the nearest integer) is: %d\n",find_median(array,n_elements));
+PRINTF("\nThe mean (rounded down to the nearest integer) is: %d\n",find_mean(array,n_elements));
+PRINTF("\nThe maximum value from the data is: %d\n",find_maximum(array,n_elements));
+PRINTF("\nThe minimum value from the data is: %d\n",find_minimum(array,n_elements));
 }
 
 void print_array(unsigned char *array, unsigned int n_elements)
 {
-for(int i=0; i<n_elements; i++)
+#ifdef VERBOSE
+PRINTF("\n_____________________________________________________________\n");
+for(int i=0; i<n_elements/2; i++)
 {
- printf("__");
-}
-printf("\n");
-for(int i=0; i<n_elements; i++)
-{
- printf("| %d ", *array);
+ PRINTF("[%d]: %d dir:%p\t [%d]: %d dir:%p \n",i,*array,array,i+(n_elements/2),*(array+(n_elements/2)),array+(n_elements/2));
  array++;
-if(i==(.3*n_elements))
-{
-printf("|\n");
 }
-else if(i==.6*n_elements)
-{
-printf("|\n");
-}
-else if(i==n_elements-1)
-{
-printf("|\n");
-}
-}
-for(int i=0; i<n_elements; i++)
-{
- printf("__");
-}
-printf("\n\n");
+PRINTF("_____________________________________________________________\n");
+#endif
 }
 
 unsigned char find_median(unsigned char *array, unsigned int n_elements)
@@ -112,7 +77,7 @@ return median;
 unsigned char find_mean(unsigned char *array, unsigned int n_elements)
 {
 unsigned char mean;
-unsigned int total=0, promedy;
+unsigned int total=0;
 for(int i=0;i<n_elements;i++)
 {
 total=total+*array;

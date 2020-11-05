@@ -20,7 +20,10 @@
  * @date April 1 2017
  *
  */
+#include <stdint.h>
 #include "memory.h"
+#include "platform.h"
+
 
 /***********************************************************
  Function Definitions
@@ -46,5 +49,80 @@ void set_all(char * ptr, char value, unsigned int size){
 
 void clear_all(char * ptr, unsigned int size){
   set_all(ptr, 0, size);
+}
+
+uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length){
+uint8_t *temp;//New pointer to save data from src in case src is overlapped
+for(size_t i=0; i<length; i++)//in this cycle, temp acquires the values from src
+{
+temp=src;
+temp++;
+src++;
+}
+temp=temp-length;//temp is pointing back to the first byte
+for(size_t j=0; j<length; j++)//dst acquires the values from temp
+{
+*dst=*temp;
+dst++;
+temp++;
+}
+dst=(dst-length);
+return(dst);
+}
+
+uint8_t * my_memcopy(uint8_t * src, uint8_t * dst, size_t length){
+for(size_t i=0; i<length; i++)
+{
+*dst=*src;
+dst++;
+src++;
+}
+dst=(dst-length);
+return(dst);
+}
+
+uint8_t * my_memset(uint8_t * src, size_t length, uint8_t value){
+for(size_t i=0; i<length; i++)
+{
+*src=value;
+src++;
+}
+src=src-length;
+return(src);
+}
+uint8_t * my_memzero(uint8_t * src, size_t length){
+for(size_t i=0; i<length; i++)
+{
+*src=0x00;
+src++;
+}
+src=src-length;
+return(src);
+}
+
+uint8_t * my_reverse(uint8_t * src, size_t length){
+uint8_t temp;
+for (size_t i=0; i < length/2; i++) {
+        temp = *(src+i);
+        *(src+i) = *(src + length - 1 - i);
+        *(src + length - 1 - i) = temp;
+					}
+return(src);
+}
+
+uint32_t * reserve_words(size_t length){
+void * r_w;
+r_w = (uint32_t *)malloc(length*sizeof(uint32_t));
+if(r_w==NULL){
+return(NULL);
+}
+else
+{
+return(r_w);
+}
+}
+
+void free_words(uint32_t * src){
+free((void *)src);
 }
 

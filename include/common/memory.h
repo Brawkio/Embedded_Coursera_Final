@@ -22,6 +22,9 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
+#include <stdlib.h>
+#include <stdint.h>
+
 /**
  * @brief Sets a value of a data array 
  *
@@ -89,5 +92,98 @@ void set_all(char * ptr, char value, unsigned int size);
  * @return void.
  */
 void clear_all(char * ptr, unsigned int size);
+
+
+/**
+ * @brief takes two byte pointers (one source and one destination) and
+ * a length of bytes to move from the source location to the destination
+ *
+ * Given a pointer to a char data set, this will set a clear a number
+ * of elements given the size provided. Clear means to set to zero. 
+ *
+ * @param ptr Pointer to data array
+ * @param size Number of elements to set to zero
+ *
+ * @return uint8_t.
+ */
+uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length);
+
+/**
+ * @brief  Copies a number of bytes from one byte pointer to another.
+ *
+ * Takes two byte pointers (one source and one destination) and
+ * a length of bytes to copy from the source location to the destination,
+ * data may get corrupted if an overlap between src and dst occurs. 
+ *
+ * @param scr Pointer to data to be copied
+ * @param dst Pointer ro receive the data from src
+ * @param length Number of elements to set to zero
+ *
+ * @return uint8_t.
+ */
+uint8_t * my_memcopy(uint8_t * src, uint8_t * dst, size_t length);
+
+/**
+ * @brief Puts the bytes of a memory allocation to a given value
+ *
+ * Takes a pointer to a source memory location, a length in bytes 
+ * and set all locations of that memory to a given value
+ *
+ * @param scr Pointer to memory allocation
+ * @param length Number of elements to set to value
+ * @param value Value to be set into the bytes of the memory
+ *
+ * @return uint8_t.
+ */
+uint8_t * my_memset(uint8_t * src, size_t length, uint8_t value);
+
+/**
+ * @brief Clears elements in a data array
+ *
+ * Given a pointer to a uint8_t data set, this will clear (put to zero) a number
+ * the number of elements given in the size parameter provided. 
+ *
+ * @param scr Pointer to memory allocation
+ * @param length Number of elements to set to zero
+ *
+ * @return uint8_t.
+ */
+uint8_t * my_memzero(uint8_t * src, size_t length);
+
+/**
+ * @brief Reverses the order of the bytes allocated in the memory
+ *
+ * This function Takes a pointer to a memory location and a length
+ * in bytes and reverse the order of all of the bytes.
+ *
+ * @param scr Pointer to memory allocation
+ * @param length Number of elements to set to zero
+ *
+ * @return uint8_t.
+ */
+uint8_t * my_reverse(uint8_t * src, size_t length);
+
+/**
+ * @brief Takes number of words to allocate in dynamic memory
+ *
+ * This function stores a certain number of words in the dynamic memory (the heap)
+ * 
+ *
+ * @param length Number of elements to be allocated/reserved.
+ *
+ * @return int32_t pointer to memory reserved memory if succesful, NULL pointer if not.
+ */
+uint32_t * reserve_words(size_t length);
+
+/**
+ * @brief frees a dynamic memory allocation by providing the pointer src to the function
+ *
+ * Given a pointer allocated in dynamic memory, this function will free all the data.
+ *
+ * @param scr Pointer to data segment to be freed.
+ *
+ * @return void.
+ */
+void free_words(uint32_t * src);
 
 #endif /* __MEMORY_H__ */
