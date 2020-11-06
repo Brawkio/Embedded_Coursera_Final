@@ -9,37 +9,40 @@
 #
 #*****************************************************************************
 
+# One point (.) is used to go one directory forward, while two points (..) are
+# used to go one directory backwards
+
 #***************************Sources files*************************************
 # Source files in case of selecting HOST
-SOURCES = main.c \
-	memory.c \
-	stats.c \
-	course1.c \
-	data.c
+SOURCES = ./src/main.c \
+	./src/memory.c \
+	./src/stats.c \
+	./src/course1.c \
+	./src/data.c
 
 
 # Source files in case of selecting the MSP432
-SOURCES_MSP432 = main.c \
-	memory.c \
-	stats.c \
-	course1.c \
-	data.c \
-	startup_msp432p401r_gcc.c \
-	system_msp432p401r.c \
-	interrupts_msp432p401r_gcc.c
+SOURCES_MSP432 = ./src/main.c \
+	./src/memory.c \
+	./src/stats.c \
+	./src/course1.c \
+	./src/data.c \
+	./src/startup_msp432p401r_gcc.c \
+	./src/system_msp432p401r.c \
+	./src/interrupts_msp432p401r_gcc.c
 #*****************************************************************************
 
 
 #************************Include paths****************************************
 # Add your include paths to this variable in case of selecting HOST
-INCLUDES = -I../src/ \
-	-I../include/common/ \
-	-I../
+INCLUDES = -I./src/ \
+	-I./include/common/ \
+	-I./
 
 # Add your include paths to this variable in case of selecting the MSP432
-INCLUDES_MSP432 = -I../src/ \
-	-I../include/CMSIS/ \
-	-I../include/msp432/ \
-	-I../include/common/ \
-	-I../
+INCLUDES_MSP432 = -I./src/ \
+	-I./include/CMSIS/ \
+	-I./include/msp432/ \
+	-I./include/common/ \
+	-I./
 #*****************************************************************************

@@ -61,8 +61,8 @@ else
 	DEPENDENCIES = $(SOURCES_MSP432:.c=.d)
 	ASSEMBLY = $(SOURCES_MSP432:.c=.asm)	
 	PREPROCESSOR = $(SOURCES_MSP432:.c=.i)
-	LDFLAGS = -Wl,-Map=$(TARGET).map -Wl,-T../$(LINKER_FILE)
-	LDFLAGS_ASSEMBLY = -Wl,-Map=$(TARGET_ASSEMBLY).map -Wl,-T../$(LINKER_FILE)#Linker flags for assembly build
+	LDFLAGS = -Wl,-Map=$(TARGET).map -Wl,-T./$(LINKER_FILE)
+	LDFLAGS_ASSEMBLY = -Wl,-Map=$(TARGET_ASSEMBLY).map -Wl,-T./$(LINKER_FILE)#Linker flags for assembly build
 	CPPFLAGS = -g -O0 -std=c99 -Wall -Werror $(INCLUDES_MSP432)
 	OBJ = arm-none-eabi-objdump -d
 	SZ = arm-none-eabi-size
@@ -75,11 +75,11 @@ endif
 # $< is the first prerequisite (usually a source file)
 
 # FILE.i target binary
-%.i: %.c
+%.i: ./src/%.c
 	$(CC) -E $< $(CFLAGS) $(CPPFLAGS) -o $@
 
 # FILE.asm target binary
-%.asm: %.c $(TARGET_ASSEMBLY).out
+%.asm: ./src/%.c $(TARGET_ASSEMBLY).out
 	$(CC) -S $< $(CFLAGS) $(CPPFLAGS) -o $@
 $(TARGET_ASSEMBLY).out:$(OBJECTS) 
 	$(CC) $(OBJECTS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS_ASSEMBLY) -o $@
@@ -87,11 +87,11 @@ $(TARGET_ASSEMBLY).out:$(OBJECTS)
 	
 # FILE.o target binary stop after the stage of compilation proper; do not assemble. The output is in the form of an assembler
 # code file for each non-assembler input file specified
-$%.o: %.c
+%.o: ./src/%.c
 	$(CC) -c $< $(CFLAGS) $(CPPFLAGS) -o $@
 
 # Dependencies
-%.d: %.c
+%.d: ./src/%.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -MF $@ -MG -MM -MP -MT $(<:.c=.o) $<
 # -MD  generates a dependency output file as a side-effect of the compilation process
 # -MF  write the generated dependency rule to a file
@@ -120,4 +120,4 @@ $(TARGET).out: $(OBJECTS)
 # Cleans all generated files from the build
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS) $(TARGET).out $(TARGET).map $(TARGET_ASSEMBLY).out $(TARGET_ASSEMBLY).map *.d *.o $(ASSEMBLY) $(PREPROCESSOR) 
+	rm -f $(OBJECTS) $(TARGET).out $(TARGET).map $(TARGET_ASSEMBLY).out $(TARGET_ASSEMBLY).map $(DEPENDENCIES) $(ASSEMBLY) $(PREPROCESSOR) *.d *.i *.o *.asm 
