@@ -19,7 +19,7 @@ SOURCES = main.c \
 
 
 # Source files in case of selecting the MSP432
-SOURCES_MSP432 = #main.c \
+SOURCES_MSP432 = main.c \
 	memory.c \
 	stats.c \
 	course1.c \

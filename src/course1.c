@@ -154,6 +154,9 @@ int8_t test_memmove2() {
     if (set[i + 8] != i)
     {
       ret = TEST_ERROR;
+/***********SCOPE*******************/
+	PRINTF("\nerror in [%d] (%d!=%d)",(i+8),set[i + 8],i);
+/************END_SCOPE******************/
     }
   }
 
@@ -183,8 +186,8 @@ int8_t test_memmove3() {
   {
     set[i] = i;
   }
-
   print_array(set, MEM_SET_SIZE_B);
+  print_array(ptrb,0);/*if this line is erased, the memmove  behavior fails*/
   my_memmove(ptra, ptrb, TEST_MEMMOVE_LENGTH);
   print_array(set, MEM_SET_SIZE_B);
 
@@ -193,6 +196,9 @@ int8_t test_memmove3() {
     if (set[i] != (i + 8))
     {
       ret = TEST_ERROR;
+/***********SCOPE*******************************************/
+	PRINTF("\nerror in [%d] (%d!=%d)",(i),set[i],(i+8));
+/************END_SCOPE**************************************/
     }
   }
 
@@ -341,7 +347,7 @@ void course1(void)
   for ( i = 0; i < TESTCOUNT; i++) 
   {
     failed += results[i];
-	PRINTF("\n results[%d] = %d \n",i,results[i]);
+	//PRINTF("\n results[%d] = %d \n",i,results[i]);//Just to check which function is throwing an error
   }
 
   PRINTF("--------------------------------\n");

@@ -55,7 +55,7 @@ ifeq ($(PLATFORM),HOST)#if HOST is selected
 	SZ = size#Utility for throwing the data size from the output file
 else
 	CC = arm-none-eabi-gcc
-	CFLAGS = -DMSP432 -DCOURSE1 -DVERBOSE -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS) 
+	CFLAGS = -DMSP432 -DCOURSE1 -DVERBOSE -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS)
 	LD = arm-none-eabi-ld
 	OBJECTS = $(SOURCES_MSP432:.c=.o)
 	DEPENDENCIES = $(SOURCES_MSP432:.c=.d)
