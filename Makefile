@@ -27,6 +27,7 @@
 #------------------------------------------------------------------------------------------------------------------------------------
 include sources.mk
 
+
 LINKER_FILE = msp432p401r.lds 
 CPU = cortex-m4
 ARCH = armv7e-m
@@ -36,10 +37,11 @@ TARGET_ASSEMBLY = final_assembly#this target is created with the solely purpose 
 #targets build and %.asm:%.c thus allowing to generate two different targets with the same recipe.
 
 # Platform Overrides
+
 	
 ifeq ($(PLATFORM),HOST)#if HOST is selected
 	CC = gcc #Compiler is gcc (native)
-	CFLAGS = -DHOST -DCOURSE1 -DVERBOSE# C Programming Flags -D Defines macro. It allows the program to select what libraries
+	CFLAGS = -DHOST# C Programming Flags -D Defines macro. It allows the program to select what libraries
 	# to include using a compile time switch defined in platform.h. If -DHOST is put in the commands/recipe, stdio.h is
 	# included. If -DMSP432 is put, msp432p401r.h is included. If another macro -DSOMETHINGELSE is put, the program will throw
 	# an error and a message.
@@ -55,7 +57,7 @@ ifeq ($(PLATFORM),HOST)#if HOST is selected
 	SZ = size#Utility for throwing the data size from the output file
 else
 	CC = arm-none-eabi-gcc
-	CFLAGS = -DMSP432 -DCOURSE1 -DVERBOSE -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS)
+	CFLAGS = -DMSP432 -mcpu=$(CPU) -march=$(ARCH) -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=$(SPECS)
 	LD = arm-none-eabi-ld
 	OBJECTS = $(SOURCES_MSP432:.c=.o)
 	DEPENDENCIES = $(SOURCES_MSP432:.c=.d)
@@ -66,6 +68,14 @@ else
 	CPPFLAGS = -g -O0 -std=c99 -Wall -Werror $(INCLUDES_MSP432)
 	OBJ = arm-none-eabi-objdump -d
 	SZ = arm-none-eabi-size
+endif
+
+ifeq ($(COURSE),COURSE1)
+	CFLAGS += -D$(COURSE)
+endif
+
+ifeq ($(VERBOSE),TRUE)
+	CFLAGS += -DVERBOSE
 endif
 
 -include $(DEPENDENCIES) #include the generated dependencies in the makefile, prefix -silences errors if the .d files don't yet exist

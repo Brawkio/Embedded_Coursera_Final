@@ -52,7 +52,7 @@ void clear_all(char * ptr, unsigned int size){
 }
 
 uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length){
-uint8_t *temp;//New pointer to save data from src in case src is overlapped
+uint8_t *temp = (uint8_t*)malloc(sizeof(uint8_t)*length);//New pointer to save data from src in case src is overlapped
 for(size_t i=0; i<length; i++)//in this cycle, temp acquires the values from src
 {
 *temp=*src;
